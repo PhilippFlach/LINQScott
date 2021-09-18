@@ -52,6 +52,24 @@ namespace Cars
                 Console.WriteLine($"\t Min: {result.Min}");
                 Console.WriteLine($"\t Avg: {result.Avg}");
             }
+
+            var query3 = cars.Join(manufacturers,
+                c => c.Manufacturer,
+                m => m.Name, (c, m) => new 
+                {
+                    m.Headquarters,
+                    c.Name,
+                    c.Combined
+                })
+                .OrderByDescending(cm => cm.Combined)
+                .ThenBy(cm => cm.Name);
+            Console.WriteLine($"***** Top 10 fuel efficient cars with Headquarters ****");
+            foreach (var result in query3.Take(10))
+            {
+                Console.WriteLine($"\t Name: {result.Name}");
+                Console.WriteLine($"\t Combined: {result.Combined}");
+                Console.WriteLine($"\t Headquarters: {result.Headquarters}");
+            }
         }
 
         private static List<Car> ProcessCars(string path)
